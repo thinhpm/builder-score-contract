@@ -35,7 +35,7 @@ contract BuilderScoreNFT is ERC721, ERC721URIStorage, Ownable, EIP712 {
         uint256 nonce,   // From sig
         bytes memory sig // BE-signed message
     ) external {
-        require(wallet == msg.sender, "Only self-mint");
+        // require(wallet == msg.sender, "Only self-mint");
         require(walletToToken[wallet] == 0, "Already has NFT");
         require(score > 0, "Invalid score");
 
