@@ -249,6 +249,19 @@
 			},
 			{
 				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "address",
+						"name": "signer",
+						"type": "address"
+					}
+				],
+				"name": "DebugSigner",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
 				"inputs": [],
 				"name": "EIP712DomainChanged",
 				"type": "event"
@@ -469,6 +482,24 @@
 					}
 				],
 				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "score",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "nonce",
+						"type": "uint256"
+					}
+				],
+				"name": "mint",
+				"outputs": [],
+				"stateMutability": "nonpayable",
 				"type": "function"
 			},
 			{
@@ -1160,11 +1191,11 @@
 			]
 		},
 		"contracts/Nft.sol": {
-			"keccak256": "0x51d6db3fd5702381488ef456d3b65163d68e32b6a1d45c8d1668edd35a1355de",
+			"keccak256": "0xbb3de64a485eaa39bfd64821d1147b32f0072c3ab11df4e3fe56eaab0d666818",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://211709bd42ec75b01cfad1eb93dfde1dce30ed345a7e819d61dc77224c142f10",
-				"dweb:/ipfs/QmUecaAUpmsfKcDt3SrwXy6spb5kzBL4o96LjL8Nk88EmY"
+				"bzz-raw://398eeb53d5e95b685d161d679d02012efb95c47da33c2fb0f86933ccb3bcd528",
+				"dweb:/ipfs/QmRrKmYmPBNzJ9JaQ7fDqNASLRjRLebLZYk1Unj4AEtuZr"
 			]
 		}
 	},

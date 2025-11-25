@@ -18,9 +18,15 @@ contract BuilderScoreNFT is ERC721, ERC721URIStorage, Ownable, EIP712 {
 
     // EIP-712 domain separator for signatures
     bytes32 private constant _MINT_TYPEHASH =
-        keccak256("MintRequest(address wallet,uint256 score,uint256 nonce)");
+    keccak256(
+        bytes(
+            "MintRequest(address wallet,uint256 score,uint256 nonce)"
+        )
+    );
 
     mapping(address => uint256) public nonces;  // Prevent replay attacks
+
+    event DebugSigner(address signer);
 
     constructor() 
         ERC721("Builder Score", "BUILD") 
@@ -38,12 +44,45 @@ contract BuilderScoreNFT is ERC721, ERC721URIStorage, Ownable, EIP712 {
         // require(wallet == msg.sender, "Only self-mint");
         require(walletToToken[wallet] == 0, "Already has NFT");
         require(score > 0, "Invalid score");
+        
 
         // Verify sig
-        bytes32 structHash = keccak256(abi.encode(_MINT_TYPEHASH, wallet, score, nonce));
+        bytes32 structHash = keccak256(
+            abi.encode(
+                _MINT_TYPEHASH,
+                wallet,
+                score,
+                nonce
+            )
+        );
+
         bytes32 hash = _hashTypedDataV4(structHash);
         address signer = hash.recover(sig);
+        emit DebugSigner(signer);
         require(signer == owner(), "Invalid sig");  // Only owner signs
+        require(nonces[wallet] == nonce, "Invalid nonce");  // One-time use
+        nonces[wallet]++;
+
+        // Mint & set score
+        uint256 tokenId = ++_nextTokenId;
+        _safeMint(wallet, tokenId);  // Safe mint!
+        builderScores[wallet] = score;
+        walletToToken[wallet] = tokenId;
+
+        string memory uri = generateTokenURI(score, tokenId);
+        _setTokenURI(tokenId, uri);
+    }
+
+    function mint(
+        uint256 score,   // From sig
+        uint256 nonce   // From sig
+    ) external {
+        address wallet = msg.sender;
+        // require(wallet == msg.sender, "Only self-mint");
+        require(walletToToken[wallet] == 0, "Already has NFT");
+        require(score > 0, "Invalid score");
+
+        // Verify sig
         require(nonces[wallet] == nonce, "Invalid nonce");  // One-time use
         nonces[wallet]++;
 
